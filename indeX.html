@@ -3,172 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scripts Library - مكتبة السكربتات</title>
+    <title>رمضان AI - العد التنازلي الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --gold: #f1c40f;
+            --dark: #2d3436;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Tajawal', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-            color: #fff;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 40px 0;
-            font-size: 3em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .script-box {
-            background: #2a2a2a;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-            border: 1px solid #3a3a3a;
-        }
-
-        .script-box:hover {
-            transform: translateY(-5px);
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .copy-btn {
-            background: #4CAF50;
+            background: linear-gradient(135deg, var(--primary), var(--dark));
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-navbar {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .ai-nav-btn {
+            background: none;
+            border: 2px solid var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
             cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+        }
+
+        .ai-nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(230, 126, 34, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .ai-nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+        }
+
+        .ai-nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .time-card {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .time-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: var(--accent);
+            transition: 0.3s ease;
+        }
+
+        .time-card:hover::after {
+            width: 100%;
+        }
+
+        .time-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+            margin: 1rem 0;
+            display: block;
             transition: all 0.3s ease;
         }
 
-        .copy-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
+        .flip-animation {
+            animation: flip 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955);
         }
 
-        pre {
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 10px;
-            overflow-x: auto;
-            position: relative;
-            tab-size: 4;
+        @keyframes flip {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0deg); }
         }
 
-        code {
-            font-family: 'Courier New', Courier, monospace;
-            color: #9cdcfe;
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 5px;
+        .ai-loading {
             display: none;
-            animation: slideIn 0.5s ease;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            color: var(--accent);
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-
-        .keyword { color: #569cd6; }
-        .function { color: #dcdcaa; }
-        .string { color: #ce9178; }
-        .comment { color: #6a9955; }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
+        .dynamic-background {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(44,62,80,0.2) 0%, rgba(45,52,54,0.8) 100%);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📚 مكتبة السكربتات</h1>
-        
-        <div class="script-box">
-            <div class="code-header">
-                <h3>مثال 1: مؤقت عد تنازلي</h3>
-                <button class="copy-btn" onclick="copyCode('code1')">
-                    <i class="far fa-copy"></i> نسخ الكود
-                </button>
-            </div>
-            <pre id="code1"><code><span class="keyword">&lt;script&gt;</span>
-<span class="keyword">function</span> <span class="function">startTimer</span>(duration) {
-    <span class="keyword">let</span> timer = duration;
-    <span class="keyword">setInterval</span>(() => {
-        <span class="keyword">let</span> minutes = parseInt(timer / 60, 10);
-        <span class="keyword">let</span> seconds = parseInt(timer % 60, 10);
-        
-        minutes = minutes < 10 ? <span class="string">"0"</span> + minutes : minutes;
-        seconds = seconds < 10 ? <span class="string">"0"</span> + seconds : seconds;
-        
-        document.<span class="function">querySelector</span>(<span class="string">'#timer'</span>).textContent = minutes + <span class="string">":"</span> + seconds;
-        
-        if (--timer < 0) timer = duration;
-    }, 1000);
-}
-<span class="keyword">&lt;/script&gt;</span></code></pre>
-        </div>
+    <div class="dynamic-background"></div>
+    
+    <nav class="ai-navbar glass-panel">
+        <button class="ai-nav-btn" onclick="showSection('countdown')">
+            <i class="fas fa-clock"></i> العد التنازلي
+        </button>
+        <button class="ai-nav-btn" onclick="showSection('athkar')">
+            <i class="fas fa-pray"></i> الأذكار
+        </button>
+        <button class="ai-nav-btn" onclick="showSection('dua')">
+            <i class="fas fa-hands-praying"></i> الأدعية
+        </button>
+        <button class="ai-nav-btn" onclick="showSection('stats')">
+            <i class="fas fa-chart-line"></i> الإحصائيات
+        </button>
+    </nav>
 
-        <!-- يمكن إضافة المزيد من السكربتات هنا -->
+    <div id="countdown" class="content-section active-section">
+        <div class="glass-panel countdown-grid">
+            <div class="time-card">
+                <span class="time-number" id="ai-days">--</span>
+                <span class="time-label">أيام</span>
+            </div>
+            <div class="time-card">
+                <span class="time-number" id="ai-hours">--</span>
+                <span class="time-label">ساعات</span>
+            </div>
+            <div class="time-card">
+                <span class="time-number" id="ai-minutes">--</span>
+                <span class="time-label">دقائق</span>
+            </div>
+            <div class="time-card">
+                <span class="time-number" id="ai-seconds">--</span>
+                <span class="time-label">ثواني</span>
+            </div>
+        </div>
     </div>
 
-    <div id="notification" class="notification">تم نسخ الكود بنجاح! ✅</div>
+    <div class="ai-loading" id="loading">
+        <i class="fas fa-brain fa-spin"></i> جارٍ تحميل البيانات...
+    </div>
 
     <script>
-        function copyCode(elementId) {
-            const codeElement = document.getElementById(elementId);
-            const text = codeElement.innerText;
+        // محاكاة نظام الذكاء الاصطنائي (استبدل بAPI حقيقي)
+        async function fetchRamadanDate() {
+            document.getElementById('loading').style.display = 'block';
             
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification();
-            });
+            // محاكاة اتصال بالخادم
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // في الواقع سيتم استدعاء API مثل:
+            // const response = await fetch('https://api.aladhan.com/v1/gToH');
+            // const data = await response.json();
+            
+            return {
+                date: '2024-03-11',
+                source: 'الراصد الفلكي السعودي'
+            };
         }
 
-        function showNotification() {
-            const notification = document.getElementById('notification');
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.animation = 'slideIn 0.5s ease reverse';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                    notification.style.animation = 'slideIn 0.5s ease';
-                }, 500);
-            }, 2000);
+        // نظام العد التنازلي الذكي
+        class SmartCountdown {
+            constructor() {
+                this.updateInterval = null;
+                this.ramadanDate = null;
+            }
+
+            async init() {
+                try {
+                    const { date, source } = await fetchRamadanDate();
+                    this.ramadanDate = new Date(date);
+                    this.startCountdown();
+                    console.log(`تم الحصول على تاريخ رمضان من: ${source}`);
+                } catch (error) {
+                    console.error('خطأ في جلب البيانات:', error);
+                    this.showError();
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+
+            startCountdown() {
+                this.updateInterval = setInterval(() => this.update(), 1000);
+            }
+
+            update() {
+                const now = new Date();
+                const diff = this.ramadanDate - now;
+
+                if (diff <= 0) {
+                    clearInterval(this.updateInterval);
+                    return this.handleRamadanStart();
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                this.animateUpdate('ai-days', days);
+                this.animateUpdate('ai-hours', hours.toString().padStart(2, '0'));
+                this.animateUpdate('ai-minutes', minutes.toString().padStart(2, '0'));
+                this.animateUpdate('ai-seconds', seconds.toString().padStart(2, '0'));
+            }
+
+            animateUpdate(elementId, newValue) {
+                const element = document.getElementById(elementId);
+                if (element.textContent !== newValue.toString()) {
+                    element.classList.add('flip-animation');
+                    setTimeout(() => {
+                        element.textContent = newValue;
+                        element.classList.remove('flip-animation');
+                    }, 300);
+                }
+            }
+
+            handleRamadanStart() {
+                document.getElementById('countdown').innerHTML = `
+                    <div class="glass-panel" style="text-align: center; padding: 2rem;">
+                        <h2 style="color: var(--accent);">🌙 كل عام وأنتم بخير! رمضان كريم! 🕌</h2>
+                    </div>
+                `;
+            }
+
+            showError() {
+                document.getElementById('countdown').innerHTML = `
+                    <div class="glass-panel" style="text-align: center; padding: 2rem; color: #e74c3c;">
+                        <h3>⚠️ حدث خطأ في جلب البيانات</h3>
+                        <p>الرجاء المحاولة لاحقاً أو التحقق من اتصال الإنترنت</p>
+                    </div>
+                `;
+            }
+        }
+
+        // بدء النظام
+        const ramadanCountdown = new SmartCountdown();
+        ramadanCountdown.init();
+
+        // إدارة الأقسام
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            document.getElementById(sectionId).classList.add('active-section');
         }
     </script>
 </body>
