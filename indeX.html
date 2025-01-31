@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripts Library - مكتبة السكربتات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .script-box {
+            background: #2a2a2a;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid #3a3a3a;
+        }
+
+        .script-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            position: relative;
+            tab-size: 4;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #9cdcfe;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .keyword { color: #569cd6; }
+        .function { color: #dcdcaa; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 مكتبة السكربتات</h1>
+        
+        <div class="script-box">
+            <div class="code-header">
+                <h3>مثال 1: مؤقت عد تنازلي</h3>
+                <button class="copy-btn" onclick="copyCode('code1')">
+                    <i class="far fa-copy"></i> نسخ الكود
+                </button>
+            </div>
+            <pre id="code1"><code><span class="keyword">&lt;script&gt;</span>
+<span class="keyword">function</span> <span class="function">startTimer</span>(duration) {
+    <span class="keyword">let</span> timer = duration;
+    <span class="keyword">setInterval</span>(() => {
+        <span class="keyword">let</span> minutes = parseInt(timer / 60, 10);
+        <span class="keyword">let</span> seconds = parseInt(timer % 60, 10);
+        
+        minutes = minutes < 10 ? <span class="string">"0"</span> + minutes : minutes;
+        seconds = seconds < 10 ? <span class="string">"0"</span> + seconds : seconds;
+        
+        document.<span class="function">querySelector</span>(<span class="string">'#timer'</span>).textContent = minutes + <span class="string">":"</span> + seconds;
+        
+        if (--timer < 0) timer = duration;
+    }, 1000);
+}
+<span class="keyword">&lt;/script&gt;</span></code></pre>
+        </div>
+
+        <!-- يمكن إضافة المزيد من السكربتات هنا -->
+    </div>
+
+    <div id="notification" class="notification">تم نسخ الكود بنجاح! ✅</div>
+
+    <script>
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const text = codeElement.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification();
+            });
+        }
+
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.5s ease reverse';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    notification.style.animation = 'slideIn 0.5s ease';
+                }, 500);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
